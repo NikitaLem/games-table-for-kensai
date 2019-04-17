@@ -1,6 +1,7 @@
 import { Http2Server } from "http2";
 import { startingTable } from './src/components/startingTable';
 import SquareInterface from "./src/Interfaces/SquareInterface";
+import { serverConfig } from './config/server.config';
 import * as express from 'express';
 import * as fs from 'fs';
 
@@ -8,7 +9,7 @@ const app: any = express();
 const http: Http2Server = require('http').Server(app);
 const io = require('socket.io')(http);
 
-const serverAddress = 'http://localhost:3030';
+let serverAddress = serverConfig.prod;
 
 let data: SquareInterface[] = startingTable;
 let isWhiteTurn: boolean = true;
@@ -22,7 +23,6 @@ app.use(express.static(__dirname + '/dist'));
 
 io.on('connection', function(socket) {
   socket.emit('getData', {data: data, activeSide: isWhiteTurn});
-
   //получаем новую модель стола от клиента и обновляем у себя на сервере, потом отправляем на все сокеты (кроме того сокета откуда пришело событие) новую модель
   socket.on('postData', (newData: SquareInterface[]) => {
     data = newData;

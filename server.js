@@ -1,12 +1,13 @@
 "use strict";
 exports.__esModule = true;
 var startingTable_1 = require("./src/components/startingTable");
+var server_config_1 = require("./config/server.config");
 var express = require("express");
 var fs = require("fs");
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var serverAddress = 'http://localhost:3030';
+var serverAddress = server_config_1.serverConfig.prod;
 var data = startingTable_1.startingTable;
 var isWhiteTurn = true;
 var music = null;
